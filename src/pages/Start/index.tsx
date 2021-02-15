@@ -13,6 +13,7 @@ const Start: React.FC = () => {
   const [form] = useForm()
   const history = useHistory()
   const [captcha, setCaptcha] = useState<any>()
+  const [chart, setChart] = useState<any>()
   const [result, setResult] = useState<{ label: string, score: number }[]>()
 
   useEffect(() => {
@@ -39,7 +40,10 @@ const Start: React.FC = () => {
       const { data } = await axios.post('/api/send', payload)
       setResult(data.result)
       const ctx = (document.querySelector('#chartResult') as any)?.getContext('2d')
-      new Chart(ctx, {
+      if (chart) {
+        chart.destroy?.()
+      }
+      setChart(new Chart(ctx, {
         type: 'horizontalBar',
         data: {
           labels: data.result.map((res: any) => res.label),
@@ -66,7 +70,7 @@ const Start: React.FC = () => {
         options: {
           legend: { display: false }
         }
-      })
+      }))
     } catch (error) {
       return message.error(error?.response?.err || 'Something error, please wait a moment')
     }
