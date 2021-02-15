@@ -70,7 +70,7 @@ const Start: React.FC = () => {
         options: {
           legend: { display: false },
           scales: {
-            xAxes: [
+            yAxes: [
               {
                 ticks: {
                   callback: (value: string) => `${value.substr(0, 10)}${value.length > 10 ? '...' : ''}`
