@@ -40,7 +40,7 @@ import path from 'path'
     console.log(query, tags)
     try {
       const data = await Klasifikasi.zslClassify(
-        process.env.MODEL_ID as string, query, [...tags, 'lainnya'], true)
+        process.env.MODEL_ID as string, query, tags, true)
       return res.send(data)
     } catch (error) {
       console.error(error)
