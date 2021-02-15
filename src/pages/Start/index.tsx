@@ -122,7 +122,7 @@ const Start: React.FC = () => {
               </Space>
             </Form.Item>
           </Form>
-          { result?.length ? <canvas style={{ marginTop: '20px' }} id="chartResult"></canvas> : '' }
+          { result?.length ? <canvas style={{ marginTop: '50px', marginBottom: '100px' }} id="chartResult"></canvas> : '' }
         </Col>
       </Row>
     </div>
