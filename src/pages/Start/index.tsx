@@ -44,7 +44,7 @@ const Start: React.FC = () => {
         chart.destroy?.()
       }
       setChart(new Chart(ctx, {
-        type: 'bar',
+        type: 'horizontalBar',
         data: {
           labels: data.result.map((res: any) => res.label),
           datasets: [{
@@ -68,7 +68,16 @@ const Start: React.FC = () => {
           }]
         },
         options: {
-          legend: { display: false }
+          legend: { display: false },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  callback: (value: string) => `${value.substr(0, 10)}${value.length > 10 ? '...' : ''}`
+                }
+              }
+            ]
+          }
         }
       }))
     } catch (error) {
