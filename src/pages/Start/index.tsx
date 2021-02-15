@@ -44,7 +44,7 @@ const Start: React.FC = () => {
         chart.destroy?.()
       }
       setChart(new Chart(ctx, {
-        type: 'horizontalBar',
+        type: 'bar',
         data: {
           labels: data.result.map((res: any) => res.label),
           datasets: [{
@@ -98,13 +98,13 @@ const Start: React.FC = () => {
                   {fields.map(field =>
                     <Space className="space" key={field.key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
                       <Form.Item {...field}>
-                        <Input size="large" placeholder="input your option..." />
+                        <Input placeholder="input your option..." />
                       </Form.Item>
                       <MinusCircleOutlined onClick={() => remove(field.name)} />
                     </Space>
                   )}
                   <Form.Item style={{ textAlign: 'center' }}>
-                    <Button size="large" onClick={() => add()} icon={<PlusOutlined />}>
+                    <Button onClick={() => add()} icon={<PlusOutlined />}>
                       Add Option
                     </Button>
                   </Form.Item>

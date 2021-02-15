@@ -41,13 +41,13 @@ const Home: React.FC = () => {
           </Steps>
           <Form form={form} onFinish={finish} layout="vertical">
             <Form.Item name="name" help="Leave it blank to make it anonymously" style={{ marginTop: '30px', display: step !== 0 ? 'none' : 'block' }}>
-              <Input size="large" />
+              <Input />
             </Form.Item>
             <Form.Item name="age" help="Fill it with number" style={{ marginTop: '30px', display: step !== 1 ? 'none' : 'block' }}>
-              <Input type="number" size="large" min={1} max={120} />
+              <Input type="number" min={1} max={120} />
             </Form.Item>
             <Form.Item name="gender" help="Please select one in dropdown" style={{ marginTop: '30px', display: step !== 2 ? 'none' : 'block' }}>
-              <Select size="large">
+              <Select>
                 <Select.Option value="male">Male</Select.Option>
                 <Select.Option value="female">Female</Select.Option>
                 <Select.Option value="other">Other</Select.Option>
