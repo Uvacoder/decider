@@ -15,6 +15,8 @@ const Start: React.FC = () => {
   const [captcha, setCaptcha] = useState<any>()
   const [chart, setChart] = useState<any>()
   const [result, setResult] = useState<{ label: string, score: number }[]>()
+  const [sentiment, setSentiment] = useState<string>()
+  const [depression, setDepression] = useState<boolean>(false)
 
   useEffect(() => {
     if (!localStorage.getItem('gender')) {
@@ -39,6 +41,8 @@ const Start: React.FC = () => {
     try {
       const { data } = await axios.post('/api/send', payload)
       setResult(data.result)
+      setSentiment(data.sentiment.result[0].label)
+      setDepression(data.depression.result[0].label === 'depresi')
       const ctx = (document.querySelector('#chartResult') as any)?.getContext('2d')
       if (chart) {
         chart.destroy?.()
@@ -109,7 +113,11 @@ const Start: React.FC = () => {
         <Col span={24} lg={{ span: 10, offset: 7 }}>
           <Typography.Title level={3} style={{ textAlign: 'center', marginBottom: '50px' }}>{result?.length ? 'AI: I think you should choose...' : 'Which one should I decide?'}</Typography.Title>
           <Form form={form} onFinish={finish} layout="vertical">
-            { result?.length ? <canvas style={{ marginBottom: '50px' }} id="chartResult"></canvas> : <Form.List name="tags">
+            { result?.length ? <>
+              <canvas style={{ marginBottom: '50px' }} id="chartResult"></canvas>
+              { sentiment === 'negatif' ? <Typography.Title level={4}>But, I don't think <em>"{result[0].label}"</em> is a good choice for you, do I? 🤔</Typography.Title> : '' }
+              { depression ? <Typography.Title level={4}>Hmm, you look so desperate from the option <em>"{result[0].label}"</em>. But, why I make it in the first place?<br /><br /><br />I don't know.</Typography.Title> : '' }
+            </> : <Form.List name="tags">
               {(fields, { add, remove }) =>
                 <>
                   {fields.map(field =>

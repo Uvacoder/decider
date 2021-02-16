@@ -41,7 +41,15 @@ import path from 'path'
     try {
       const data = await Klasifikasi.zslClassify(
         process.env.MODEL_ID as string, query, tags, true)
-      return res.send(data)
+      const sentiment = await Klasifikasi.zslClassify(
+        process.env.MODEL_ID as string, data.result[0].label, [
+          'positif', 'negatif', 'netral'
+        ], true)
+      const depression = await Klasifikasi.zslClassify(
+        process.env.MODEL_ID as string, data.result[0].label, [
+          'depresi', 'normal'
+        ], true)
+      return res.send({ ...data, sentiment, depression })
     } catch (error) {
       console.error(error)
       return res.status(500).send({ err: error.toString() })
