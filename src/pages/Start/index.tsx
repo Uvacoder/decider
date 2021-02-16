@@ -1,5 +1,5 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Col, Divider, Form, Input, message, Row, Space, Typography } from 'antd'
+import { Button, Col, Divider, Form, Input, message, Popconfirm, Row, Space, Typography } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import Chart from 'chart.js'
 import Recaptcha from 'react-google-invisible-recaptcha'
@@ -23,7 +23,7 @@ const Start: React.FC = () => {
   }, [])
 
   const finish = async (values: any) => {
-    const tags = values.tags.filter(Boolean)
+    const tags = values.tags?.filter(Boolean)
     if (!tags?.length || tags.length < 2 || tags.length > 5) {
       return message.error('Please add options min 2 and max 5')
     }
@@ -76,6 +76,11 @@ const Start: React.FC = () => {
                   callback: (value: string) => `${value.substr(0, 10)}${value.length > 10 ? '...' : ''}`
                 }
               }
+            ],
+            xAxes: [
+              {
+                ticks: { beginAtZero: true }
+              }
             ]
           }
         }
@@ -91,17 +96,20 @@ const Start: React.FC = () => {
   }
 
   const reset = () => {
-    setResult([])
-    form.setFieldsValue({ tags: [] })
+    if (result?.length) {
+      setResult([])
+    } else {
+      form.setFieldsValue({ tags: [] })
+    }
   }
 
   return (
     <div className="container">
       <Row>
-        <Col span={24} lg={{ span: 12, offset: 6 }}>
-          <Typography.Title level={2} style={{ textAlign: 'center', marginBottom: '50px' }}>which one should I decide?</Typography.Title>
+        <Col span={24} lg={{ span: 10, offset: 7 }}>
+          <Typography.Title level={3} style={{ textAlign: 'center', marginBottom: '50px' }}>{result?.length ? 'AI: I think you should choose...' : 'Which one should I decide?'}</Typography.Title>
           <Form form={form} onFinish={finish} layout="vertical">
-            <Form.List name="tags">
+            { result?.length ? <canvas style={{ marginBottom: '50px' }} id="chartResult"></canvas> : <Form.List name="tags">
               {(fields, { add, remove }) =>
                 <>
                   {fields.map(field =>
@@ -119,23 +127,24 @@ const Start: React.FC = () => {
                   </Form.Item>
                 </>
               }
-            </Form.List>
+            </Form.List> }
             <Recaptcha
               ref={(ref: any) => setCaptcha(ref)}
               sitekey={process.env.REACT_APP_SITE_KEY_RECAPTCHA}
               badge="bottomleft" />
             <Divider />
             <Form.Item style={{ float: 'left' }}>
-              <Button danger type="primary" onClick={restart}>Restart</Button>
+              <Popconfirm title="Are you sure to restart this from beginning?" onConfirm={restart}>
+                <Button danger type="primary">Restart</Button>
+              </Popconfirm>
             </Form.Item>
             <Form.Item style={{ float: 'right' }}>
               <Space>
-                <Button onClick={reset}>Reset Options</Button>
-                <Button htmlType="submit" type="primary">Send</Button>
+                <Button onClick={reset}>{result?.length ? 'Back' : 'Reset'}</Button>
+                <Button disabled={!!result?.length} htmlType="submit" type="primary">Send</Button>
               </Space>
             </Form.Item>
           </Form>
-          { result?.length ? <canvas style={{ marginTop: '70px', marginBottom: '100px' }} id="chartResult"></canvas> : '' }
         </Col>
       </Row>
     </div>

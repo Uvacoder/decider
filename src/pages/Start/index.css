@@ -12,3 +12,7 @@
   flex-grow: 0.95;
   margin: 0 0 8px;
 }
+
+.grecaptcha-badge {
+  display: none !important;
+}
