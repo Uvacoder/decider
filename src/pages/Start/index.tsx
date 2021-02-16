@@ -41,7 +41,7 @@ const Start: React.FC = () => {
     try {
       const { data } = await axios.post('/api/send', payload)
       setResult(data.result)
-      setSentiment(data.sentiment.result[0].label && data.depression.result[0].score > 0.69)
+      setSentiment(data.depression.result[0].score > 0.69 ? data.sentiment.result[0].label : null)
       setDepression(data.depression.result[0].label === 'depresi' && data.depression.result[0].score > 0.69)
       const ctx = (document.querySelector('#chartResult') as any)?.getContext('2d')
       if (chart) {
